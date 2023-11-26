@@ -1,5 +1,15 @@
-import { Controller, Get, Query, HttpCode, HttpStatus } from '@nestjs/common';
-import { ApiTags } from '@nestjs/swagger';
+import {
+  Controller,
+  Get,
+  Post,
+  Query,
+  HttpCode,
+  HttpStatus,
+  UseInterceptors,
+  UploadedFile,
+} from '@nestjs/common';
+import { ApiTags, ApiConsumes, ApiBody } from '@nestjs/swagger';
+import { FileInterceptor } from '@nestjs/platform-express';
 import { QueryDingdingDto } from './dto/query-dingding.dto';
 import { InfinityPaginationResultType } from 'src/utils/types/infinity-pagination-result.type';
 import { Dingding } from './entities/dindding.entity';
@@ -36,5 +46,23 @@ export class DingdingController {
       }),
       { page, limit },
     );
+  }
+
+  @Post('upload')
+  @ApiConsumes('multipart/form-data')
+  @ApiBody({
+    schema: {
+      type: 'object',
+      properties: {
+        file: {
+          type: 'string',
+          format: 'binary',
+        },
+      },
+    },
+  })
+  @UseInterceptors(FileInterceptor('file'))
+  uploadFile(@UploadedFile() file: Express.Multer.File) {
+    return this.dingdingService.uploadFile(file);
   }
 }

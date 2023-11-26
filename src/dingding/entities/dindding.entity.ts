@@ -18,6 +18,6 @@ export class Dingding extends EntityHelper {
   @Column()
   endTime: string;
 
-  @Column()
+  @Column({ type: 'decimal', precision: 10, scale: 2 })
   rest: number;
 }
