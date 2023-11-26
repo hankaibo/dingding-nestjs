@@ -31,9 +31,13 @@ export class DingdingController {
   ): Promise<InfinityPaginationResultType<Dingding>> {
     const page = query?.page ?? 1;
     let limit = query?.limit ?? 10;
-    if (limit > 50) {
-      limit = 50;
+    if (limit > 1000) {
+      limit = 1000;
     }
+
+    query.filters = {
+      name: '卜凯',
+    };
 
     return infinityPagination(
       await this.dingdingService.findManyWithPagination({
