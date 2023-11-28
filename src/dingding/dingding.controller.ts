@@ -35,10 +35,6 @@ export class DingdingController {
       limit = 1000;
     }
 
-    query.filters = {
-      name: '卜凯',
-    };
-
     return infinityPagination(
       await this.dingdingService.findManyWithPagination({
         filterOptions: query?.filters,
