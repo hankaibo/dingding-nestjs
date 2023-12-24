@@ -7,13 +7,13 @@ import {
   ValidateNested,
 } from 'class-validator';
 
-export class FilterDingdingDto {
+export class FilterAttendanceReportDto {
   @ApiProperty()
   @IsOptional()
   name: string;
 }
 
-export class SortDingdingDto {
+export class SortAttendanceReportDto {
   @ApiProperty()
   @IsString()
   orderBy: string;
@@ -23,7 +23,7 @@ export class SortDingdingDto {
   order: string;
 }
 
-export class QueryDingdingDto {
+export class QueryAttendanceReportDto {
   @ApiProperty({
     required: false,
   })
@@ -43,18 +43,22 @@ export class QueryDingdingDto {
   @ApiProperty({ type: String, required: false })
   @IsOptional()
   @Transform(({ value }) =>
-    value ? plainToInstance(FilterDingdingDto, JSON.parse(value)) : undefined,
+    value
+      ? plainToInstance(FilterAttendanceReportDto, JSON.parse(value))
+      : undefined,
   )
   @ValidateNested()
-  @Type(() => FilterDingdingDto)
-  filters?: FilterDingdingDto | null;
+  @Type(() => FilterAttendanceReportDto)
+  filters?: FilterAttendanceReportDto | null;
 
   @ApiProperty({ type: String, required: false })
   @IsOptional()
   @Transform(({ value }) =>
-    value ? plainToInstance(SortDingdingDto, JSON.parse(value)) : undefined,
+    value
+      ? plainToInstance(SortAttendanceReportDto, JSON.parse(value))
+      : undefined,
   )
   @ValidateNested({ each: true })
-  @Type(() => SortDingdingDto)
-  sort?: SortDingdingDto[] | null;
+  @Type(() => SortAttendanceReportDto)
+  sort?: SortAttendanceReportDto[] | null;
 }

@@ -2,15 +2,15 @@ import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
 import { EntityHelper } from 'src/utils/entity-helper';
 
 @Entity()
-export class Dingding extends EntityHelper {
+export class AttendanceReport extends EntityHelper {
   @PrimaryGeneratedColumn()
   id: number;
 
   @Column()
   name: string;
 
-  @Column({ type: 'date' })
-  workDate: string;
+  @Column({ type: 'timestamptz' })
+  workDate: Date;
 
   @Column()
   startTime: string;

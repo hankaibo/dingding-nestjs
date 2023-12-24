@@ -28,7 +28,7 @@ import { DataSource, DataSourceOptions } from 'typeorm';
 import { AllConfigType } from './config/config.type';
 import { SessionModule } from './session/session.module';
 import { MailerModule } from './mailer/mailer.module';
-import { DingdingModule } from './dingding/dingding.module';
+import { AttendanceReportModule } from './attendance-report/attendance-report.module';
 
 @Module({
   imports: [
@@ -88,7 +88,7 @@ import { DingdingModule } from './dingding/dingding.module';
     MailModule,
     MailerModule,
     HomeModule,
-    DingdingModule,
+    AttendanceReportModule,
   ],
 })
 export class AppModule {}

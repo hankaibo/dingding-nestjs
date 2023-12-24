@@ -1,10 +1,13 @@
 import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { read, utils } from 'xlsx';
-import { Dingding } from './entities/dindding.entity';
+import { AttendanceReport } from './entities/attendance-report.entity';
 import { Repository, FindOptionsWhere } from 'typeorm';
 import { IPaginationOptions } from 'src/utils/types/pagination-options';
-import { FilterDingdingDto, SortDingdingDto } from './dto/query-dingding.dto';
+import {
+  FilterAttendanceReportDto,
+  SortAttendanceReportDto,
+} from './dto/query-attendance-report.dto';
 
 type ItemType = {
   name: string;
@@ -15,10 +18,10 @@ type ItemType = {
 };
 
 @Injectable()
-export class DingdingService {
+export class AttendanceReportService {
   constructor(
-    @InjectRepository(Dingding)
-    private dingdingRepository: Repository<Dingding>,
+    @InjectRepository(AttendanceReport)
+    private attendanceReportRepository: Repository<AttendanceReport>,
   ) {}
 
   findManyWithPagination({
@@ -26,16 +29,16 @@ export class DingdingService {
     sortOptions,
     paginationOptions,
   }: {
-    filterOptions?: FilterDingdingDto | null;
-    sortOptions?: SortDingdingDto[] | null;
+    filterOptions?: FilterAttendanceReportDto | null;
+    sortOptions?: SortAttendanceReportDto[] | null;
     paginationOptions: IPaginationOptions;
-  }): Promise<Dingding[]> {
-    const where: FindOptionsWhere<Dingding> = {};
+  }): Promise<AttendanceReport[]> {
+    const where: FindOptionsWhere<AttendanceReport> = {};
     if (filterOptions?.name?.length) {
       where.name = filterOptions.name;
     }
 
-    return this.dingdingRepository.find({
+    return this.attendanceReportRepository.find({
       skip: (paginationOptions.page - 1) * paginationOptions.limit,
       take: paginationOptions.limit,
       where: where,
@@ -77,7 +80,7 @@ export class DingdingService {
         name = item[key[0]];
       }
 
-      const workDate = new Date(+item.__EMPTY_6).toLocaleDateString();
+      const workDate = new Date(+item.__EMPTY_6);
 
       const startTime = item.__EMPTY_8;
       if (startTime === '') {
@@ -99,10 +102,10 @@ export class DingdingService {
     }
 
     // 批量插入
-    await this.dingdingRepository
+    await this.attendanceReportRepository
       .createQueryBuilder()
       .insert()
-      .into(Dingding)
+      .into(AttendanceReport)
       .values(users)
       .execute();
   }

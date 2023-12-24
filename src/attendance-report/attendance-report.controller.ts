@@ -10,25 +10,29 @@ import {
 } from '@nestjs/common';
 import { ApiTags, ApiConsumes, ApiBody } from '@nestjs/swagger';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { QueryDingdingDto } from './dto/query-dingding.dto';
+import { QueryAttendanceReportDto } from './dto/query-attendance-report.dto';
 import { InfinityPaginationResultType } from 'src/utils/types/infinity-pagination-result.type';
-import { Dingding } from './entities/dindding.entity';
+import { AttendanceReport } from './entities/attendance-report.entity';
 import { infinityPagination } from 'src/utils/infinity-pagination';
-import { DingdingService } from './dingding.service';
+import { AttendanceReportService } from './attendance-report.service';
+import { TransformInterceptor } from './transform.interceptor';
 
-@ApiTags('Dingding')
+@ApiTags('AttendanceReport')
 @Controller({
-  path: 'dingding',
+  path: 'attendance-report',
   version: '1',
 })
-export class DingdingController {
-  constructor(private readonly dingdingService: DingdingService) {}
+export class AttendanceReportController {
+  constructor(
+    private readonly attendanceReportService: AttendanceReportService,
+  ) {}
 
   @Get()
   @HttpCode(HttpStatus.OK)
+  @UseInterceptors(TransformInterceptor)
   async findAll(
-    @Query() query: QueryDingdingDto,
-  ): Promise<InfinityPaginationResultType<Dingding>> {
+    @Query() query: QueryAttendanceReportDto,
+  ): Promise<InfinityPaginationResultType<AttendanceReport>> {
     const page = query?.page ?? 1;
     let limit = query?.limit ?? 10;
     if (limit > 1000) {
@@ -36,7 +40,7 @@ export class DingdingController {
     }
 
     return infinityPagination(
-      await this.dingdingService.findManyWithPagination({
+      await this.attendanceReportService.findManyWithPagination({
         filterOptions: query?.filters,
         sortOptions: query?.sort,
         paginationOptions: {
@@ -63,6 +67,6 @@ export class DingdingController {
   })
   @UseInterceptors(FileInterceptor('file'))
   uploadFile(@UploadedFile() file: Express.Multer.File) {
-    return this.dingdingService.uploadFile(file);
+    return this.attendanceReportService.uploadFile(file);
   }
 }
