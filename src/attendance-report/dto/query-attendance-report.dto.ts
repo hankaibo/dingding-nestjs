@@ -11,6 +11,10 @@ export class FilterAttendanceReportDto {
   @ApiProperty()
   @IsOptional()
   name: string;
+
+  @ApiProperty()
+  @IsOptional()
+  date: Date;
 }
 
 export class SortAttendanceReportDto {

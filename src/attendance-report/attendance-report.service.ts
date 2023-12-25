@@ -2,7 +2,7 @@ import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { read, utils } from 'xlsx';
 import { AttendanceReport } from './entities/attendance-report.entity';
-import { Repository, FindOptionsWhere } from 'typeorm';
+import { Repository, FindOptionsWhere, MoreThanOrEqual } from 'typeorm';
 import { IPaginationOptions } from 'src/utils/types/pagination-options';
 import {
   FilterAttendanceReportDto,
@@ -36,6 +36,9 @@ export class AttendanceReportService {
     const where: FindOptionsWhere<AttendanceReport> = {};
     if (filterOptions?.name?.length) {
       where.name = filterOptions.name;
+    }
+    if (filterOptions?.date) {
+      where.workDate = MoreThanOrEqual(filterOptions.date);
     }
 
     return this.attendanceReportRepository.find({
